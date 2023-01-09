@@ -10,7 +10,18 @@
 
 		<style>
 			img {
-				width:  200px;
+				max-height:  200px;
+			}
+			h1 {
+				text-align: center;
+				text-transform: uppercase;
+				padding-bottom: 10px;
+				border-bottom: 3px solid #00B7E6;
+				margin-top: 20px;
+				margin-bottom: 30px;
+			}
+			.card-title {
+				text-align: center;
 			}
 		</style>
 	</head>
@@ -23,12 +34,13 @@
 					<div class="col">
 						<div class="card">
 							<img v-if="fish['Image Gallery'] && fish['Image Gallery'][0]" v-bind:src="fish['Image Gallery'][0].src" class="card-img-top" v-bind:alt="fish['Image Gallery'][0].alt">
+							<img v-else src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9Ds5rnt5aPPBpQyTO0drxKutUiSnObkKS0Q&usqp=CAU" class="card-img-top" alt="There is no image for this species">
 							<div class="card-body">
 								<h5 class="card-title">{{fish['Species Name']}}</h5>
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item">Scientific Name : {{fish['Scientific Name']}}</li>
-									<li class="list-group-item">Fisheries Region : {{fish['NOAA Fisheries Region']}}</li>
-									<li class="list-group-item">Population level : {{fish.Population}}</li>
+									<li class="list-group-item"><strong>Scientific Name :</strong> {{fish['Scientific Name']}}</li>
+									<li class="list-group-item"><strong>Fisheries Region :</strong> {{fish['NOAA Fisheries Region']}}</li>
+									<li class="list-group-item" v-if="fish.Population"><strong>Population level :</strong> {{fish.Population}}</li>
 								</ul>
 							</div>
 						</div>
