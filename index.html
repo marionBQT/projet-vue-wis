@@ -6,14 +6,25 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<title>Fish App</title>
+
+		<style>
+			img {
+				width:  200px;
+			}
+		</style>
 	</head>
 
 	<body>
 		<div id="myapp">
 			<h1>Fish App</h1>
 			<div v-for="fish in responsedata">
-				<div>{{fish.Population}}</div>
-				<div v-if="fish['Image Gallery'][0]">{{fish['Image Gallery'][0].src}}</div>
+				<a v-if="fish['Image Gallery'] && fish['Image Gallery'][0]"
+					><img v-bind:alt="fish['Image Gallery'][0].alt" v-bind:src="fish['Image Gallery'][0].src"
+				/></a>
+				<div>Species Name : {{fish['Species Name']}}</div>
+				<div>Fisheries Region : {{fish['NOAA Fisheries Region']}}</div>
+				<div>Scientific Name : {{fish['Scientific Name']}}</div>
+				<div>Population level : {{fish.Population}}</div>
 			</div>
 		</div>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -23,11 +34,6 @@
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="https://unpkg.com/vue@next"></script>
 		<script>
-			//axios.get("https://www.fishwatch.gov/api/species")
-			//.then((response) =>
-			//{
-			//	const data = response.data;
-			//})
 
 			const API = 'https://www.fishwatch.gov/api/species'
 			const myappcomponent = {
@@ -41,14 +47,7 @@
 					async fetchApi(){
 						await axios.get(API)
 						.then((response) => {
-							this.responsedata = response.data,
-							//this.fish1 = this.responsedata[0]
-							//this.fish1 = this.responsedata[0].Population;
-							this.fish1 = {
-								//Image: this.responsedata[0].ImageGallery,
-								Population: this.responsedata[0].Population,
-							}
-							console.log(this.fish1)
+							this.responsedata = response.data
 						})
 						.catch((error) => {
 							console.log(error)
