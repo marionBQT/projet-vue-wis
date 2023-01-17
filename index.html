@@ -9,14 +9,26 @@
 		<title>Fish App</title>
 
 		<style>
+			.col {
+				margin-right: 20px;
+				margin-left: 20px;
+			}
 			img {
-				max-height:  200px;
+				max-height:  300px;
 			}
 			h1 {
 				text-align: center;
 				text-transform: uppercase;
 				padding-bottom: 10px;
 				border-bottom: 3px solid #00B7E6;
+				margin-top: 20px;
+				margin-bottom: 30px;
+			}
+			#introduction {
+				text-align: center;
+			}
+			#buttons {
+				text-align: center;
 				margin-top: 20px;
 				margin-bottom: 30px;
 			}
@@ -28,7 +40,21 @@
 
 	<body>
 		<div id="myapp">
-			<h1>Fish App</h1>
+			<header>
+				<h1>Fish App</h1>
+				<div id="introduction">
+					This app displays informations on various sea species. You can display them in ascending or descending order using the 2 buttons below. Enjoy !
+				</div>
+				<div id="buttons">
+					<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+						<label class="btn btn-outline-primary" for="btnradio1" @click="Ascending_order()">Ascending order</label>
+
+						<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+						<label class="btn btn-outline-primary" for="btnradio2"  @click="Descending_order()">Descending order</label>
+					</div>
+				</div>
+			</header>
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 				<div v-for="fish in responsedata">
 					<div class="col">
@@ -48,10 +74,6 @@
 				</div>
 			</div>
 		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="https://unpkg.com/vue@next"></script>
 		<script>
@@ -60,20 +82,28 @@
 			const myappcomponent = {
 				data(){
 					return {
-						responsedata: {},
-						fish1: null,
+						responsedata: [],
 					};
 				},
 				methods : {
 					async fetchApi(){
 						await axios.get(API)
 						.then((response) => {
-							this.responsedata = response.data
+							this.responsedata = response.data;
+							const fishsAsc = this.responsedata.sort((a,b) => (a["Species Name"] > b["Species Name"]) ? 1 : ((b["Species Name"] > a["Species Name"]) ? -1 : 0));
 						})
 						.catch((error) => {
 							console.log(error)
 						})
-					}
+					},
+					Ascending_order() {
+						const fishAsc = this.responsedata.sort((a,b) => (a["Species Name"] > b["Species Name"]) ? 1 : ((b["Species Name"] > a["Species Name"]) ? -1 : 0));
+						return fishAsc;
+					},
+					Descending_order() {
+						const fishDesc = this.responsedata.sort((a,b) => (a["Species Name"] < b["Species Name"]) ? 1 : ((b["Species Name"] < a["Species Name"]) ? -1 : 0));
+						return fishDesc;
+					},
 				},
 				mounted(){
 					this.fetchApi()
